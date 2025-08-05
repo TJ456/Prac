@@ -1,0 +1,90 @@
+# 🔒 Node.js Dependencies
+node_modules/
+.env
+
+# 🔧 Logs & Temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 🚫 System & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.temp
+*.lock
+*.pid
+
+# ⚙️ OS Specific (Windows)
+AppData/
+Desktop/
+Downloads/
+Documents/
+Favorites/
+Links/
+Music/
+Pictures/
+Videos/
+NTUSER.DAT*
+SendTo/
+Recent/
+PrintHood/
+NetHood/
+Start Menu/
+Templates/
+My Documents/
+Cookies/
+Local Settings/
+
+# 👤 User-specific configs
+.bash_history
+.gitconfig
+.gradle/
+.idlerc/
+.keras/
+.lesshst
+.ollama/
+.vscode/
+.codeium/
+.bun/
+.yarnrc
+
+# 💣 Potential leftover files
+_*
+build.gradle
+settings.gradle
+
+# 🧪 Git-specific
+.git-for-windows-updater
+*.orig
+
+# 💼 Ignore other projects
+Health-Tracker1/
+Classwork1/
+Hack4bengal/
+Institute-administration1/
+NeuroShield-Hack4Bengal/
+SpeakME/
+Teacher-Interface/
+Wallet1/
+admin-2/
+dash/
+dash_backup/
+foundry-temp/
+fr/
+go/
+haha/
+mah-/
+monad-chain-game/
+morph-and-seek-arena/
+react/
+customer-web/
+testing/
