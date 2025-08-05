@@ -2,7 +2,7 @@
 
 // ✅ STEP 1: Import mongoose
 // Why: Need mongoose to create schemas and establish relationships between collections
-
+const mongoose = require ("mongoose");
 // ✅ STEP 2: Define Task schema with user relationship
 // Why: Each task belongs to a specific user (one-to-many relationship)
 // This is fundamental for multi-user applications
@@ -23,7 +23,8 @@
 
 // ✅ STEP 3: Create and export the Task model
 // Why: This model will be used in controllers to perform CRUD operations
-
+const Task = mongoose.model('Task', userschema);
+module.exports = Task;
 // 💡 PRO TIPS:
 // - Use enums for status/priority to prevent invalid values
 // - Consider adding categories field for task organization  
