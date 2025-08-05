@@ -1,3 +1,40 @@
 {
-  "_comment": "📦 Read package-guide.md to understand each dependency and script purpose"
+  "name": "taskflow-api",
+  "version": "1.0.0",
+  "description": "A professional task management REST API with user authentication",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "jwt",
+    "authentication",
+    "rest-api"
+  ],
+  "author": "Tanmay Joddar",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TJ456/Prac.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TJ456/Prac/issues"
+  },
+  "homepage": "https://github.com/TJ456/Prac#readme"
 }

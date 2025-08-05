@@ -2,12 +2,18 @@
 
 // ✅ STEP 1: Import required modules
 // - User model: For database operations
+const User = require('../models/userModel');
 // - bcryptjs: For password hashing and comparison
+const bcrypt = require('bcrypt.js');
 // - generateToken: Custom utility for JWT creation
+const generateToken = require('../utils/generateToken');
 // Why: Controllers handle business logic and coordinate between models and routes
- import 
+
+
 // ✅ STEP 2: Create registerUser async function
 // Why: Registration creates new user accounts with secure password storage
+
+
 
 // Registration Logic Flow:
 // 2a. Extract name, email, password from req.body
