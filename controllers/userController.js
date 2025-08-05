@@ -5,7 +5,7 @@
 // - bcryptjs: For password hashing and comparison
 // - generateToken: Custom utility for JWT creation
 // Why: Controllers handle business logic and coordinate between models and routes
-
+ import 
 // ✅ STEP 2: Create registerUser async function
 // Why: Registration creates new user accounts with secure password storage
 
