@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 // ✅ STEP 3: Create and export the User model
 // Why: Model is a constructor function that creates documents
 // Convention: Model names are capitalized and singular (User, not users)
-const User = mongoose.model('User', userschema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;
 // 💡 PRO TIPS:
 // - Use unique: true for email to prevent duplicate users
