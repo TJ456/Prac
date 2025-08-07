@@ -13,8 +13,6 @@ const generateToken = require('../utils/generateToken');
 // ✅ STEP 2: Create registerUser async function
 // Why: Registration creates new user accounts with secure password storage
 
-
-
 // Registration Logic Flow:
 // 2a. Extract name, email, password from req.body
 // 2b. Validate input data (check if all required fields exist)
@@ -24,6 +22,52 @@ const generateToken = require('../utils/generateToken');
 // 2f. Create new user with User.create({ name, email, password: hashedPassword })
 // 2g. If successful, generate JWT token and return user data (without password)
 // 2h. Response format: { _id, name, email, token }
+
+const registerUser = async (req, res) => {
+  try {
+    // ✅ STEP 2a: Extract data
+    const { name, email, password } = req.body;
+
+    // ✅ STEP 2b: Validate input
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // ✅ STEP 2c: Check if user exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // ✅ STEP 2e: Hash the password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // ✅ STEP 2f: Create the user
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // ✅ STEP 2g + 2h: Send response with token (without password)
+    if (user) {
+      const token = generateToken(user._id); // use user._id
+
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: token,
+      });
+    } else {
+      res.status(401).json({ message: "User creation failed" });
+    }
+
+  } catch (error) {
+    console.error("register error: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // ✅ STEP 3: Create loginUser async function  
 // Why: Login authenticates existing users and provides access tokens
@@ -37,7 +81,35 @@ const generateToken = require('../utils/generateToken');
 // 3f. If password doesn't match, return 401 "Invalid credentials"
 // 3g. If credentials valid, generate JWT token
 // 3h. Return user data with token: { _id, name, email, token }
-
+const loginUser = async(res , req)=>
+{ try{
+    const {email , password} = req.body;
+    if (!email || !password){
+        res.status(400).json({message:"all requires required"}); 
+    }
+    const user = await User.findOne({email});
+    if (!user){
+        res.status(401).json({message:"Invalid credentials"});
+    }
+    const isMatch = await bcrypt.compare(password,user.password);
+    if (!isMatch){
+        res.status(401).json({message:"Invalid credentials"});
+    }
+    
+        const token = await generateToken(user._id);
+        res.status(201)({
+         name: user.name,
+         _id : user._id,
+         email: user.email,
+         token : token,
+        });
+}
+     
+catch (error) {
+    console.error("register error: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 // ✅ STEP 4: Add proper error handling with try-catch
 // Why: Database operations and bcrypt can throw errors
 // - Wrap each function in try-catch
@@ -46,7 +118,7 @@ const generateToken = require('../utils/generateToken');
 
 // ✅ STEP 5: Export both controller functions
 // Why: Routes will import these functions to handle authentication endpoints
-
+module.exports = { registerUser, loginUser};
 // 🔒 SECURITY BEST PRACTICES:
 // - Never store plain text passwords
 // - Use high salt rounds for bcrypt (12+ for production)
