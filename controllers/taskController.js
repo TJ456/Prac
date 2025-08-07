@@ -3,10 +3,12 @@
 // ✅ STEP 1: Import Task model 
 // Why: Need Task model to perform database operations
 // Controller handles business logic and coordinates between routes and database
+const Task = require ("../models/taskMode");
+const dotenv = require("dotenv");
+dotenv.config();
 
 // ✅ STEP 2: Create getTasks async function (Get all user's tasks)
 // Why: Users should only see their own tasks, not everyone's tasks
-
 // getTasks Logic Flow:
 // 2a. Get user ID from req.user._id (set by authMiddleware)
 // 2b. Use Task.find({ user: req.user._id }) to get only user's tasks
@@ -14,6 +16,9 @@
 // 2d. Optional: Add population .populate('user', 'name email') to include user details
 // 2e. Return tasks array with 200 status
 // 2f. Handle errors with try-catch, return 500 on server error
+
+
+
 
 // ✅ STEP 3: Create createTask async function (Create new task)
 // Why: Users need to add new tasks to their task list
