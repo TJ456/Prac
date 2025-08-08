@@ -17,7 +17,14 @@ dotenv.config();
 // 2e. Return tasks array with 200 status
 // 2f. Handle errors with try-catch, return 500 on server error
 
+const getTasks = async (res , req)=>{
+   try{
+    const id = await req.user._id;
+    const getTask = await Task.find({user: req.user._id});
 
+   }    
+
+ };
 
 
 // ✅ STEP 3: Create createTask async function (Create new task)
@@ -30,6 +37,10 @@ dotenv.config();
 // 3d. Automatically assign current user as task owner
 // 3e. Return created task with 201 status
 // 3f. Handle validation errors (400) and server errors (500)
+  const createTask = async ( res, req)=>{
+
+
+  };
 
 // ✅ STEP 4: Create getTaskById async function (Get single task)
 // Why: Users might want to view details of a specific task
@@ -43,6 +54,11 @@ dotenv.config();
 // 4f. Return task with 200 status if authorized
 // 4g. Handle errors appropriately
 
+const getTaskById = async (res,req)=>
+{
+
+};
+
 // ✅ STEP 5: Create updateTask async function (Update existing task)
 // Why: Users need to modify their tasks (change status, edit details, etc.)
 
@@ -54,6 +70,12 @@ dotenv.config();
 // 5e. Return updated task with 200 status
 // 5f. Handle not found (404) and authorization (403) errors
 
+const updateTask = async(res,req)=>{
+
+
+};
+
+
 // ✅ STEP 6: Create deleteTask async function (Delete task)
 // Why: Users need to remove completed or unwanted tasks
 
@@ -64,9 +86,10 @@ dotenv.config();
 // 6d. Return success message with 200 status
 // 6e. Handle not found and authorization errors
 
+
 // ✅ STEP 7: Export all controller functions
 // Why: Routes will import these functions to handle task-related endpoints
-
+module.exports = {getTasks,createTask,getTaskById, updateTask};
 // 🔒 SECURITY CONSIDERATIONS:
 // - Always verify task ownership before operations
 // - Validate all input data to prevent injection attacks
