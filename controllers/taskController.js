@@ -3,26 +3,28 @@
 // ✅ STEP 1: Import Task model 
 // Why: Need Task model to perform database operations
 // Controller handles business logic and coordinates between routes and database
-const Task = require ("../models/taskMode");
-const dotenv = require("dotenv");
-dotenv.config();
-
+const Task = require ("../models/taskModel");
 // ✅ STEP 2: Create getTasks async function (Get all user's tasks)
 // Why: Users should only see their own tasks, not everyone's tasks
 // getTasks Logic Flow:
-// 2a. Get user ID from req.user._id (set by authMiddleware)
+// 2a. Get user ID from req.user._id (set by 2authMiddleware)
 // 2b. Use Task.find({ user: req.user._id }) to get only user's tasks
 // 2c. Optional: Add sorting .sort({ createdAt: -1 }) for newest first
 // 2d. Optional: Add population .populate('user', 'name email') to include user details
 // 2e. Return tasks array with 200 status
 // 2f. Handle errors with try-catch, return 500 on server error
 
-const getTasks = async (res , req)=>{
+const getTasks = async (req , res)=>{
    try{
-    const id = await req.user._id;
-    const getTask = await Task.find({user: req.user._id});
+    const tasks = await Task.find({user: req.user._id})
+    .sort({createdAt: -1})
+    .populate("user","name email");
 
+    res.status(200).json({tasks});
    }    
+   catch(error){
+    res.status(500).json({message:"task fetching error"});
+   }
 
  };
 
@@ -37,9 +39,27 @@ const getTasks = async (res , req)=>{
 // 3d. Automatically assign current user as task owner
 // 3e. Return created task with 201 status
 // 3f. Handle validation errors (400) and server errors (500)
-  const createTask = async ( res, req)=>{
+  const createTask = async ( req, res)=>{
+     try{
+        const {title ,description , status, priority ,duedate} = req.body;
+        if(!title){
+            res.status(400).json({message: "tittle is required"});
+        }
+        const newTask = Task.create({
+            title,
+            description,
+            status,
+            priority,
+            duedate,
+            user: req.user._id,// 3d. Automatically assign current user as task owner
+        });
+        
+    
+      res.status(201).json(newTask);
 
-
+      }catch(error){
+        res.status(400).json({message:"server error",error})
+    }
   };
 
 // ✅ STEP 4: Create getTaskById async function (Get single task)
@@ -54,8 +74,22 @@ const getTasks = async (res , req)=>{
 // 4f. Return task with 200 status if authorized
 // 4g. Handle errors appropriately
 
-const getTaskById = async (res,req)=>
+const getTaskById = async (req,res)=>
 {
+    try{
+  const{id} = req.params;
+   const task = await Task.findById(id);
+   if (!task){
+    return res.status(400).json({message:"task not found"});
+    
+   }
+if (task.user.toString() !== req.user._id.toString()){
+    res.status(403).json({message:"Not authorized to view this task"})
+}
+res.status(200).json({message:"task is authorized",task});
+}catch(error){
+    res.status(401).json({message:"request failure"});
+}
 
 };
 
@@ -70,8 +104,29 @@ const getTaskById = async (res,req)=>
 // 5e. Return updated task with 200 status
 // 5f. Handle not found (404) and authorization (403) errors
 
-const updateTask = async(res,req)=>{
+const updateTask = async(req,res)=>{
+ 
+    try{
+    const {id} = req.params;
+       const task = await Task.findById(id);
+   if (!task){
+    return res.status(400).json({message:"task not found"});
+    
+   }
+if (task.user.toString() !== req.user._id.toString()){
+    res.status(403).json({message:"Not authorized to view this task"})
+}
 
+const updatedTask = await Task.findByIdAndUpdate(id,req.body,{new:true,runValidators:true});
+
+res.status(200).json({message:"updataed task",task: updatedTask});
+
+
+
+    }catch(error){
+ res.status(500).json({ message: "Server error", error: error.message });
+    }
+    
 
 };
 
@@ -80,16 +135,34 @@ const updateTask = async(res,req)=>{
 // Why: Users need to remove completed or unwanted tasks
 
 // deleteTask Logic Flow:
-// 6a. Extract task ID from req.params.id
+// 6a. Extract task ID from req.params.id//params are route parameters
 // 6b. Find task and verify ownership
 // 6c. Use Task.findByIdAndDelete(req.params.id) or task.remove()
 // 6d. Return success message with 200 status
 // 6e. Handle not found and authorization errors
-
+const deleteTask = async(req,res)=>
+{
+    try{
+const{id}= req.params;
+       const task = await Task.findById(id);
+   if (!task){
+    return res.status(400).json({message:"task not found"});
+    
+   }
+if (task.user.toString() !== req.user._id.toString()){
+    res.status(403).json({message:"Not authorized to view this task"})
+}
+ const delTask = await Task.findByIdAndDelete(req.params.id);
+ res.status(200).json({message:"task deleted successfully",task:delTask});
+    }
+    catch (error){
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
 
 // ✅ STEP 7: Export all controller functions
 // Why: Routes will import these functions to handle task-related endpoints
-module.exports = {getTasks,createTask,getTaskById, updateTask};
+module.exports = {getTasks,createTask,getTaskById, updateTask,deleteTask};
 // 🔒 SECURITY CONSIDERATIONS:
 // - Always verify task ownership before operations
 // - Validate all input data to prevent injection attacks
