@@ -3,10 +3,13 @@
 // ✅ STEP 1: Import express, taskController, and authMiddleware
 // Why: Need router for route definitions, controllers for business logic, 
 // and authMiddleware to protect routes (only authenticated users can access)
-
+const express = require ("express");
+const {getTasks,createTask,getTaskById, updateTask,deleteTask} = require('..controller/taskController');
+const dotenv = require ("dotenv");
 // ✅ STEP 2: Create router instance
 // const router = express.Router()
 // Why: Router allows modular route definitions that can be mounted in app.js
+const router = express.router();
 
 // ✅ STEP 3: Define protected task routes following RESTful conventions
 // Why: All task operations require authentication, so every route uses authMiddleware
@@ -18,21 +21,21 @@
 // - Middleware: protect (authentication required)
 // - Handler: taskController.getTasks
 // - Returns: Array of user's tasks
-
+router.get("/", protect, getTasks);
 // POST /api/tasks - Create new task
 // - Method: POST (creating new resource)  
 // - Middleware: protect (authentication required)
 // - Handler: taskController.createTask
 // - Body: { title, description, status, priority, dueDate }
 // - Returns: Created task object
-
+router.post("/", protect, createTask);
 // GET /api/tasks/:id - Get specific task by ID
 // - Method: GET (retrieving specific resource)
 // - Middleware: protect (authentication required)  
 // - Handler: taskController.getTaskById
 // - Params: id (task ID in URL)
 // - Returns: Single task object
-
+router.get("/:id", protect, getTaskById);
 // PUT /api/tasks/:id - Update specific task
 // - Method: PUT (updating entire resource)
 // - Middleware: protect (authentication required)
@@ -40,14 +43,14 @@
 // - Params: id (task ID in URL)
 // - Body: Updated task fields
 // - Returns: Updated task object
-
+router.put("/:id", protect, updateTask);
 // DELETE /api/tasks/:id - Delete specific task
 // - Method: DELETE (removing resource)
 // - Middleware: protect (authentication required)
 // - Handler: taskController.deleteTask
 // - Params: id (task ID in URL)  
 // - Returns: Success message
-
+router.delete("/:id", protect, deleteTask);
 // ✅ STEP 4: Apply authMiddleware to all routes
 // Two approaches:
 // Option A: Apply to each route individually: router.get('/api/tasks', protect, getTasks)
@@ -55,7 +58,7 @@
 
 // ✅ STEP 5: Export the router
 // Why: app.js will import and mount this at /api/tasks
-
+module.exports = router;
 // 🔗 MIDDLEWARE CHAIN UNDERSTANDING:
 // Request → authMiddleware (verify JWT) → route handler → response
 // If authMiddleware fails, request stops and returns 401
