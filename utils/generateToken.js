@@ -28,7 +28,6 @@ const generateToken = (userId) => {
     // - algorithm: 'HS256' (HMAC SHA256 - most common)
     {
       expiresIn: '30d',
-      algorithm: 'HS256'
     }
   );
 };

@@ -4,12 +4,13 @@
 // Why: Need router for route definitions, controllers for business logic, 
 // and authMiddleware to protect routes (only authenticated users can access)
 const express = require ("express");
-const {getTasks,createTask,getTaskById, updateTask,deleteTask} = require('..controller/taskController');
+const {getTasks,createTask,getTaskById, updateTask,deleteTask} = require("../controllers/taskController");
 const dotenv = require ("dotenv");
+
 // ✅ STEP 2: Create router instance
 // const router = express.Router()
 // Why: Router allows modular route definitions that can be mounted in app.js
-const router = express.router();
+const router = express.Router();
 
 // ✅ STEP 3: Define protected task routes following RESTful conventions
 // Why: All task operations require authentication, so every route uses authMiddleware

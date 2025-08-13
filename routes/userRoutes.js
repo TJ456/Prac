@@ -27,7 +27,7 @@ router.post('/register',registerUser);
 // - Handler: userController.loginUser  
 // - Body: { email, password }
 // - Response: { _id, name, email, token }
-router.post('/login'/loginUser);
+router.post('/login',loginUser);
 // ✅ STEP 4: Export the router
 // Why: app.js will import this router and mount it at /api/users
 module.exports = router ;
